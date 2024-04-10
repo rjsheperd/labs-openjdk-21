@@ -26,11 +26,14 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <objc/objc-runtime.h>
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <SystemConfiguration/SystemConfiguration.h>
 #include <Foundation/Foundation.h>
+
+#if !(TARGET_OS_IPHONE || TARGET_OS_SIMULATOR)
+#include <objc/objc-runtime.h>
+#endif
 
 #include "java_props_macosx.h"
 
@@ -232,7 +235,13 @@ typedef struct {
 
 void setOSNameAndVersion(java_props_t *sprops) {
     // Hardcode os_name, and fill in os_version
-    sprops->os_name = strdup("Mac OS X");
+#if TARGET_OS_IPHONE
+    sprops->os_name = "iOS";
+#elif TARGET_OS_SIMULATOR
+    sprops->os_name = "iOS Simulator";
+#else
+    sprops->os_name = "Mac OS X";
+#endif
 
     NSString *nsVerStr = NULL;
     char* osVersionCStr = NULL;
@@ -419,6 +428,7 @@ void setUserHome(java_props_t *sprops) {
  * Method for fetching proxy info and storing it in the property list.
  */
 void setProxyProperties(java_props_t *sProps) {
+#if  !(TARGET_OS_IPHONE || TARGET_OS_SIMULATOR)
     if (sProps == NULL) return;
 
     char buf[16];    /* Used for %d of an int - 16 is plenty */
@@ -491,4 +501,5 @@ void setProxyProperties(java_props_t *sProps) {
 #undef CHECK_PROXY
 
     CFRelease(dict);
+#endif
 }
