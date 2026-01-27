@@ -1,35 +1,6 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 /* pngrio.c - functions for data input
  *
- * This file is available under and governed by the GNU General Public
- * License version 2 only, as published by the Free Software Foundation.
- * However, the following notice accompanied the original version of this
- * file and, per its terms, should not be removed:
- *
- * Copyright (c) 2018 Cosmin Truta
+ * Copyright (c) 2018-2025 Cosmin Truta
  * Copyright (c) 1998-2002,2004,2006-2016,2018 Glenn Randers-Pehrson
  * Copyright (c) 1996-1997 Andreas Dilger
  * Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.
@@ -85,7 +56,7 @@ png_default_read_data(png_structp png_ptr, png_bytep data, size_t length)
    /* fread() returns 0 on error, so it is OK to store this in a size_t
     * instead of an int, which is what fread() actually returns.
     */
-   check = fread(data, 1, length, png_voidcast(png_FILE_p, png_ptr->io_ptr));
+   check = fread(data, 1, length, png_voidcast(FILE *, png_ptr->io_ptr));
 
    if (check != length)
       png_error(png_ptr, "Read Error");

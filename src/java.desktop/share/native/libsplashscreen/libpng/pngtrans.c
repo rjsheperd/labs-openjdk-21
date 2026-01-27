@@ -1,35 +1,6 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 /* pngtrans.c - transforms the data in a row (used by both readers and writers)
  *
- * This file is available under and governed by the GNU General Public
- * License version 2 only, as published by the Free Software Foundation.
- * However, the following notice accompanied the original version of this
- * file and, per its terms, should not be removed:
- *
- * Copyright (c) 2018 Cosmin Truta
+ * Copyright (c) 2018-2024 Cosmin Truta
  * Copyright (c) 1998-2002,2004,2006-2018 Glenn Randers-Pehrson
  * Copyright (c) 1996-1997 Andreas Dilger
  * Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.
@@ -131,10 +102,10 @@ png_set_interlace_handling(png_structrp png_ptr)
    if (png_ptr != 0 && png_ptr->interlaced != 0)
    {
       png_ptr->transformations |= PNG_INTERLACE;
-      return (7);
+      return 7;
    }
 
-   return (1);
+   return 1;
 }
 #endif
 
@@ -526,6 +497,8 @@ png_do_strip_channel(png_row_infop row_info, png_bytep row, int at_start)
    png_bytep dp = row; /* destination pointer */
    png_bytep ep = row + row_info->rowbytes; /* One beyond end of row */
 
+   png_debug(1, "in png_do_strip_channel");
+
    /* At the start sp will point to the first byte to copy and dp to where
     * it is copied to.  ep always points just beyond the end of the row, so
     * the loop simply copies (channels-1) channels until sp reaches ep.
@@ -726,6 +699,8 @@ png_do_bgr(png_row_infop row_info, png_bytep row)
 void /* PRIVATE */
 png_do_check_palette_indexes(png_structrp png_ptr, png_row_infop row_info)
 {
+   png_debug(1, "in png_do_check_palette_indexes");
+
    if (png_ptr->num_palette < (1 << row_info->bit_depth) &&
       png_ptr->num_palette > 0) /* num_palette can be 0 in MNG files */
    {
@@ -736,7 +711,7 @@ png_do_check_palette_indexes(png_structrp png_ptr, png_row_infop row_info)
        * forms produced on either GCC or MSVC.
        */
       int padding = PNG_PADBITS(row_info->pixel_depth, row_info->width);
-      png_bytep rp = png_ptr->row_buf + row_info->rowbytes - 1;
+      png_bytep rp = png_ptr->row_buf + row_info->rowbytes;
 
       switch (row_info->bit_depth)
       {
@@ -827,8 +802,8 @@ png_do_check_palette_indexes(png_structrp png_ptr, png_row_infop row_info)
     defined(PNG_WRITE_USER_TRANSFORM_SUPPORTED)
 #ifdef PNG_USER_TRANSFORM_PTR_SUPPORTED
 void PNGAPI
-png_set_user_transform_info(png_structrp png_ptr, png_voidp
-   user_transform_ptr, int user_transform_depth, int user_transform_channels)
+png_set_user_transform_info(png_structrp png_ptr, png_voidp user_transform_ptr,
+    int user_transform_depth, int user_transform_channels)
 {
    png_debug(1, "in png_set_user_transform_info");
 
@@ -861,7 +836,7 @@ png_voidp PNGAPI
 png_get_user_transform_ptr(png_const_structrp png_ptr)
 {
    if (png_ptr == NULL)
-      return (NULL);
+      return NULL;
 
    return png_ptr->user_transform_ptr;
 }
